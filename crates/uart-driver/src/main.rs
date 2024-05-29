@@ -14,8 +14,8 @@ use sel4_microkit::{
 };
 use sel4_microkit_message::MessageInfoExt as _;
 
-use banscii_pl011_driver_core::Driver;
-use banscii_pl011_driver_interface_types::*;
+use banscii_uart_driver_core::Driver;
+use banscii_uart_driver_interface_types::*;
 
 const DEVICE: Channel = Channel::new(0);
 const ASSISTANT: Channel = Channel::new(1);
@@ -23,7 +23,7 @@ const ASSISTANT: Channel = Channel::new(1);
 #[protection_domain]
 fn init() -> HandlerImpl {
     let driver =
-        unsafe { Driver::new(memory_region_symbol!(pl011_register_block: *mut ()).as_ptr()) };
+        unsafe { Driver::new(memory_region_symbol!(uart_register_block: *mut ()).as_ptr()) };
     HandlerImpl {
         driver,
         buffer: Deque::new(),

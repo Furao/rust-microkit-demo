@@ -17,9 +17,9 @@ which will be used to authenticate the work they produce.
 
 The Banscii system is comprised of three components:
 
-- `pl011-driver` (untrusted): Serial driver.
+- `uart-driver` (untrusted): Serial driver.
 - `assistant` (untrusted): Interacts with the human operator with a text interface via
-    `pl011-driver` to receive subject material and, in concert with `artist`, return authentic works
+    `uart-driver` to receive subject material and, in concert with `artist`, return authentic works
     of art. `assistant` takes a subject (a string), renders it to greyscale ASCII art using a
     TrueType font, and then passes it to `artist` for completion.
 - `artist` (trusted): Receives drafts from `assistant`, which it completes, digitally signs, and

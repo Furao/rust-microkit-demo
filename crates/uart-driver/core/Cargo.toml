@@ -10,7 +10,7 @@
 #
 
 [package]
-name = "banscii-pl011-driver-core"
+name = "banscii-uart-driver-core"
 version = "0.1.0"
 authors = ["Nick Spinale <nick.spinale@coliasgroup.com>"]
 edition = "2021"

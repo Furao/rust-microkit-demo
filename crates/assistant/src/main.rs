@@ -27,9 +27,9 @@ use sel4_microkit_message::MessageInfoExt as _;
 
 use banscii_artist_interface_types as artist;
 use banscii_assistant_core::Draft;
-use banscii_pl011_driver_interface_types as pl011_driver;
+use banscii_uart_driver_interface_types as uart_driver;
 
-const PL011_DRIVER: Channel = Channel::new(0);
+const UART_DRIVER: Channel = Channel::new(0);
 const ARTIST: Channel = Channel::new(1);
 
 const REGION_SIZE: usize = 0x4_000;
@@ -68,7 +68,7 @@ impl Handler for HandlerImpl {
 
     fn notified(&mut self, channel: Channel) -> Result<(), Self::Error> {
         match channel {
-            PL011_DRIVER => {
+            UART_DRIVER => {
                 while let Some(b) = get_char() {
                     if let b'\n' | b'\r' = b {
                         newline();
@@ -189,8 +189,8 @@ fn newline() {
 }
 
 fn get_char() -> Option<u8> {
-    let req = pl011_driver::Request::GetChar;
-    let resp: pl011_driver::GetCharSomeResponse = PL011_DRIVER
+    let req = uart_driver::Request::GetChar;
+    let resp: uart_driver::GetCharSomeResponse = UART_DRIVER
         .pp_call(MessageInfo::send_using_postcard(req).unwrap())
         .recv_using_postcard()
         .unwrap();
@@ -198,8 +198,8 @@ fn get_char() -> Option<u8> {
 }
 
 fn put_char(val: u8) {
-    let req = pl011_driver::Request::PutChar { val };
-    PL011_DRIVER
+    let req = uart_driver::Request::PutChar { val };
+    UART_DRIVER
         .pp_call(MessageInfo::send_using_postcard(req).unwrap())
         .recv_empty()
         .unwrap();
