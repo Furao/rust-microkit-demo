@@ -5,6 +5,7 @@
 #
 
 BUILD ?= build
+MICROKIT_BOARD ?= qemu_virt_aarch64
 
 build_dir := $(BUILD)
 
@@ -15,7 +16,7 @@ none:
 clean:
 	rm -rf $(build_dir)
 
-microkit_board := qemu_virt_aarch64
+microkit_board := $(MICROKIT_BOARD)
 microkit_config := debug
 microkit_sdk_config_dir := $(MICROKIT_SDK)/board/$(microkit_board)/$(microkit_config)
 
@@ -54,7 +55,7 @@ $(eval $(foreach crate_name,$(crate_names),$(call build_crate,$(crate_name))))
 
 ### Loader
 
-system_description := banscii.system
+system_description := $(microkit_board)_banscii.system
 
 loader := $(build_dir)/loader.img
 
@@ -66,6 +67,9 @@ $(loader): $(system_description) $(crates)
 		--config $(microkit_config) \
 		-r $(build_dir)/report.txt \
 		-o $@
+
+.PHONY: loader
+loader: $(loader)
 
 ### Run
 
